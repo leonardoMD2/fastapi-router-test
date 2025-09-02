@@ -19,7 +19,6 @@ async def startFunc(app: FastAPI):
 
 
 app = FastAPI(lifespan=startFunc)
-dbm = DBManager()
 app.include_router(routerClient)
 app.include_router(routerProducts)
 app.include_router(routerPedidos)
