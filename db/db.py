@@ -55,3 +55,7 @@ class DBManager:
     def getClienteForId(self, id: int, cursor) -> list:
         res = clienteManager.getClienteForId(id, cursor)
         return res
+
+    def modifyClient(self, id: int, updatedClient: ClienteModel, cursor) -> str:
+        res = clienteManager.modifyClient(id, updatedClient, cursor)
+        return res

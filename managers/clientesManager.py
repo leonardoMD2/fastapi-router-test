@@ -20,3 +20,16 @@ class ClienteManager:
             "SELECT id_cliente,nombre FROM cliente WHERE id_cliente = ?", (id,)
         ).fetchall()
         return [{"id": row["id_cliente"], "nombre": row["nombre"]} for row in res]
+
+    def modifyClient(
+        self, id: int, updatedClient: ClienteModel, cursor: sqlite3.Cursor
+    ) -> str:
+        cursor.execute(
+            "UPDATE cliente SET nombre = ? WHERE id_cliente = ?",
+            (updatedClient.nombre, id),
+        )
+        return "Cliente modificado!"
+
+    def deleteClient(self, id: int, cursor: sqlite3.Cursor) -> str:
+        cursor.execute("DELETE FROM cliente WHERE id_cliente = ?", (id,))
+        return "Cliente eliminado"
