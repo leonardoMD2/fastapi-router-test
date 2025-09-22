@@ -1,22 +1,20 @@
-import sqlite3
-
+import psycopg
 from fastapi import APIRouter, Depends
-
-from db.db import DBManager
-from managers.conexionManager import getCursor
+from managers.conexionManagerSupabase import getCursor
+from managers.productosManager import ProductosManager
 from models.models import ProductoModel
 
-dbm = DBManager()
+ProdManager = ProductosManager()
 router = APIRouter(prefix="/productos", tags=["Productos router"])
 
 
 @router.get("/obtener_productos")
-def getProductos(cursor: sqlite3.Cursor = Depends(getCursor)):
-    res = dbm.getProductos(cursor)
+def getProductos(producto: ProductoModel, cursor: psycopg.Cursor = Depends(getCursor)):
+    res = ProdManager.addProducto(producto, cursor)
     return res
 
 
 @router.post("/crear_productos")
-def postProductos(producto: ProductoModel, cursor: sqlite3.Cursor = Depends(getCursor)):
-    res = dbm.addProducto(producto, cursor)
+def postProductos(producto: ProductoModel, cursor: psycopg.Cursor = Depends(getCursor)):
+    res = ProdManager.addProducto(producto, cursor)
     return {"msg": res}

@@ -1,34 +1,32 @@
-import sqlite3
-
+import psycopg
 from fastapi import APIRouter, Depends
-
-from db.db import DBManager
-from managers.conexionManager import getCursor
+from managers.conexionManagerSupabase import getCursor
+from managers.pedidosManager import PedidosManager
 from models.models import PedidoModel
 
-dbm = DBManager()
+PedidoManager = PedidosManager()
 router = APIRouter(prefix="/pedidos", tags=["Pedidos router"])
 
 
 @router.post("/crear_pedido")
-def postPedido(pedido: PedidoModel, cursor: sqlite3.Cursor = Depends(getCursor)):
-    res = dbm.addPedido(pedido, cursor)
+def postPedido(pedido: PedidoModel, cursor: psycopg.Cursor = Depends(getCursor)):
+    res = PedidoManager.addPedido(pedido, cursor)
     return {"msg": res}
 
 
 @router.get("/obtener_pedidos")
-def getPedidos(cursor: sqlite3.Cursor = Depends(getCursor)):
-    res = dbm.getPedidos(cursor)
+def getPedidos(cursor: psycopg.Cursor = Depends(getCursor)):
+    res = PedidoManager.getPedidos(cursor)
     return res
 
 
 @router.get("/obtener_pedido/{id}")
-def getPedidoForId(id: int, cursor: sqlite3.Cursor = Depends(getCursor)):
-    res = dbm.getPedidoForId(id, cursor)
+def getPedidoForId(id: int, cursor: psycopg.Cursor = Depends(getCursor)):
+    res = PedidoManager.getPedidoForId(id, cursor)
     return res
 
 
 @router.get("/obtener_pedido_por_cliente/{nombre}")
-def getPedidoForCliente(nombre: str, cursor: sqlite3.Cursor = Depends(getCursor)):
-    res = dbm.getPedidoForCliente(nombre, cursor)
+def getPedidoForCliente(nombre: str, cursor: psycopg.Cursor = Depends(getCursor)):
+    res = PedidoManager.getPedidoForCliente(nombre, cursor)
     return res
