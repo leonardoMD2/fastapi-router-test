@@ -20,18 +20,21 @@ class PedidosManager:
             {"producto": row[0], "precio": row[1], "cliente": row[2]} for row in res
         ]
 
-    def getPedidoForCliente(self, nombre: str, cursor: psycopg.Cursor) -> list | None:
+    def getPedidoForCliente(self, nombre: str, cursor: psycopg.Cursor) -> list | str:
         idCliente = cursor.execute(
             "SELECT id_cliente FROM cliente WHERE nombre = (%s)", (nombre,)
         ).fetchone()
+        print(idCliente)
         if idCliente:
             res = cursor.execute(
                 "SELECT producto.nombre, producto.precio, cliente.nombre FROM pedido INNER JOIN cliente ON pedido.id_cliente = cliente.id_cliente INNER JOIN producto ON pedido.id_producto = producto.id_producto WHERE pedido.id_cliente = %s",
-                (idCliente,),
+                (idCliente[0],),
             ).fetchall()
             return [
                 {"producto": row[0], "precio": row[1], "cliente": row[2]} for row in res
             ]
+        else:
+            return "Error, usuario no encontrado"
 
     def addPedido(self, pedido: PedidoModel, cursor: psycopg.Cursor):
         cursor.execute(

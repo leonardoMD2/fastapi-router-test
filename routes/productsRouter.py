@@ -9,8 +9,8 @@ router = APIRouter(prefix="/productos", tags=["Productos router"])
 
 
 @router.get("/obtener_productos")
-def getProductos(producto: ProductoModel, cursor: psycopg.Cursor = Depends(getCursor)):
-    res = ProdManager.addProducto(producto, cursor)
+def getProductos(cursor: psycopg.Cursor = Depends(getCursor)):
+    res = ProdManager.getProductos(cursor)
     return res
 
 
